@@ -12,9 +12,9 @@ class Scrape
 
     public function run(): void
     {
-        $document = ScrapeHelper::fetchDocument('https://www.magpiehq.com/developer-challenge/smartphones');
+            $document = ScrapeHelper::fetchDocument('https://www.magpiehq.com/developer-challenge/smartphones');
 
-            $nodeValues = $document->filter('.product')->each(function (Crawler $node, $i){
+            $this->products = $document->filter('.product')->each(function (Crawler $node, $i){
             //$title = $node->text();
             $title = $node->filter('h3')->text();
             $price = $node->filter('.text-sm')->previousAll()->text();
@@ -38,14 +38,12 @@ class Scrape
 
             ];
 
-            //return $data;
-            print_r($data);
-            //echo $title;
+            return array_unique($data);
         });
 
-        //print_r(json_encode($nodeValues, 200));
+            //print_r(json_encode($this->products, JSON_UNESCAPED_SLASHES));
 
-        file_put_contents('output.json', json_encode($this->products));
+        file_put_contents('output.json', json_encode($this->products,  JSON_UNESCAPED_SLASHES));
     }
 }
 
